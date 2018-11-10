@@ -31,8 +31,8 @@ public :
     std::string whatisstored;
 
 public slots:
-    void loadExistedTable();
-    void saveTable();
+    void loadExistedTable(std::string filename);
+    void saveTable(std::string filename);
     void generate(int lowMargin,int upMargin,std::string mode);
     void query(std::string hashvalue,std::string mode);
 

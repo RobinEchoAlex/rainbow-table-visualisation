@@ -31,6 +31,9 @@ private:
 void openFile();
 void saveFile();
 void test();
+void load();
+void about();
+void save();
 Ui::MainWindow ui;
 
 private slots:

@@ -10,6 +10,8 @@
 #include <QToolBar>
 #include <QTextBrowser>
 #include <QString>
+#include <QDir>
+#include <QFileDialog>
 #include "mainwindow.h"
 
 #define lengthOfword 5
@@ -188,10 +190,10 @@ void Rainbowtable::query(std::string hashValue,std::string mode)
     if(foundflag==0) send("fail to find the password",1);
 }
 
-void Rainbowtable::saveTable()
+void Rainbowtable::saveTable(std::string filename)
 {
     std::ofstream outfile;
-    outfile.open("rainbowTable.dat");
+    outfile.open(filename);
     std::map<std::string,std::string>::iterator it;
     qDebug()<<"Save Begin"<<endl;
     it = this->frontEndNode.begin();
@@ -204,7 +206,7 @@ void Rainbowtable::saveTable()
     outfile.close();
 }
 
-void Rainbowtable::loadExistedTable()
+void Rainbowtable::loadExistedTable(std::string filename)
 {
     std::ifstream infile;
     std::string endNode;
@@ -213,9 +215,10 @@ void Rainbowtable::loadExistedTable()
     QString QEndNode;
     QString QFrontNode;
     QString QTransferNode;
+    QString Directory;
 
     qDebug() << "Load Begin" <<endl;
-    infile.open("C:\\Users\\Robin\\Documents\\QtProject\\RainbowTable\\rainbowTable.dat");
+    infile.open(filename);
     if (!infile.is_open()) qDebug()<<"Open failed"<<endl;
 
     while(infile>>endNode>>frontNode)

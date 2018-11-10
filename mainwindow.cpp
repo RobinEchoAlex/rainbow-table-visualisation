@@ -6,6 +6,9 @@
 #include <QDebug>
 #include <QTextBrowser>
 #include <QButtonGroup>
+#include <QDir>
+#include <QFileDialog>
+#include <string>
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
 #include "rainbowtable.h"
@@ -24,17 +27,19 @@ MainWindow::MainWindow(QWidget *parent) :
     openAction = new QAction(QIcon(":/icon/images/Open.png"), tr("&Open"), this);
     openAction->setShortcuts(QKeySequence::Open);
     openAction->setStatusTip(tr("Open an existing rainbow table"));
-    connect(openAction, &QAction::triggered,rainbowtable, &Rainbowtable::loadExistedTable);
+    connect(openAction, &QAction::triggered,this, &MainWindow::load);
+    //QString Directory = QDir::toNativeSeparators(QFileDialog::getExistingDirectory(this,tr("load file"),QDir::currentPath()));
+
 
     saveAction = new QAction(QIcon(":/icon/images/Save.png"),tr("&Save"),this);
     saveAction->setShortcut(QKeySequence::Save);
     saveAction->setStatusTip(tr("Save the rainbow table"));
-    connect(saveAction, &QAction::triggered, rainbowtable, &Rainbowtable::saveTable);
+    connect(saveAction, &QAction::triggered, this, &MainWindow::save);
 
     aboutAction = new QAction(QIcon(":/icon/images/Information.png"),tr("&Information"),this);
     aboutAction->setShortcut(QKeySequence::HelpContents);
     aboutAction->setStatusTip(tr("Information about this program"));
-    //connect(saveAction, &QAction::triggered, rainbowtable, &Rainbowtable::saveTable);
+    connect(aboutAction, &QAction::triggered, this, &MainWindow::about);
 
     QMenu *file = menuBar()->addMenu(tr("&File"));
     file->addAction(openAction);
@@ -60,11 +65,6 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
 
-}
-
-void MainWindow::test()
-{
-    qDebug()<<"This connect function works normally"<<endl;
 }
 
 void MainWindow::open()
@@ -95,25 +95,25 @@ void MainWindow::print(QString & name,int status)
 
 void MainWindow::stringToHtmlFilter(QString &str)
 {
-   str.replace("&","&amp;");
-   str.replace(">","&gt;");
-   str.replace("<","&lt;");
-   str.replace("\"","&quot;");
-   str.replace("\'","&#39;");
-   str.replace(" ","&nbsp;");
-   str.replace("\n","<br>");
-   str.replace("\r","<br>");
+    str.replace("&","&amp;");
+    str.replace(">","&gt;");
+    str.replace("<","&lt;");
+    str.replace("\"","&quot;");
+    str.replace("\'","&#39;");
+    str.replace(" ","&nbsp;");
+    str.replace("\n","<br>");
+    str.replace("\r","<br>");
 }
 
 void MainWindow::stringToHtml(QString &str,QColor crl)
 {
-     QByteArray array;
-     array.append(crl.red());
-     array.append(crl.green());
-     array.append(crl.blue());
-     QString strC(array.toHex());
-     str = QString("<spanT style=\" color:#%1;\">%2</span>").arg(strC).arg(str);
- }
+    QByteArray array;
+    array.append(crl.red());
+    array.append(crl.green());
+    array.append(crl.blue());
+    QString strC(array.toHex());
+    str = QString("<spanT style=\" color:#%1;\">%2</span>").arg(strC).arg(str);
+}
 void MainWindow::on_StartGeneration_clicked()
 {
     int lowMargin;
@@ -139,6 +139,89 @@ void MainWindow::on_StartCrack_clicked()
     QHash = QHash.simplified();//Remove whiteSpace at the end of the qhash
     Hash = QHash.toStdString();
 
-     if (a==0) rainbowtable->query(Hash,"MD5");
-     else if (a==1) rainbowtable->query(Hash,"SHA1");
+    if (a==0) rainbowtable->query(Hash,"MD5");
+    else if (a==1) rainbowtable->query(Hash,"SHA1");
+}
+
+void MainWindow::about()
+{
+    QMessageBox::information(this, tr("About..."), tr("developed by gitee:robinalex\n"
+                                                      "copyright information:\n"
+                                                      "SHA1 Algorithm is in public domain\n"
+                                                      "MD5 Algorithm is Copyright (C) 1991-2, RSA Data Security\n"
+                                                      "All other creations can be distributed under CC BY-SA 4.0\n"))
+            ;
+}
+
+void MainWindow::load()
+{
+    QString QfileName;
+    QString information;
+    std::string fileName;
+    QFileDialog *fileDialog = new QFileDialog(this);
+    fileDialog->setWindowTitle(tr("Load File"));
+    fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
+    fileDialog->setFileMode(QFileDialog::AnyFile);
+    fileDialog->setViewMode(QFileDialog::Detail);
+
+    fileDialog->setGeometry(10,30,300,200);
+    fileDialog->setDirectory(".");
+    QfileName = fileDialog->getOpenFileName(
+                                 this,
+                                 tr("Open File"),
+                                 "/home",
+                                 tr("Data base (*.dat)"));
+    #ifdef WIN32
+    QfileName.replace("/", "\\");    //change format of filename when operate under Windows
+    #endif
+    qDebug()<<"filename is" <<QfileName<<endl;
+    fileName= QfileName.toStdString();
+    if (QfileName.isEmpty())
+    {
+        information="Open Rainbow table cancelled";
+        this->print(information,0);
+        return;
+    }
+    else
+    {
+        information = "File "+QfileName+" open";
+        this->print(information,0);
+        rainbowtable->loadExistedTable(fileName);
+    }
+}
+
+void MainWindow::save()
+{
+    QString QfileName;
+    QString information;
+    std::string fileName;
+    QFileDialog *fileDialog = new QFileDialog(this);
+    fileDialog->setWindowTitle(tr("Save File"));
+    fileDialog->setAcceptMode(QFileDialog::AcceptSave);
+    fileDialog->setFileMode(QFileDialog::AnyFile);
+    fileDialog->setViewMode(QFileDialog::Detail);
+    fileDialog->setGeometry(10,30,300,200);
+    fileDialog->setDirectory(".");
+    QfileName = fileDialog->getSaveFileName(
+                                 this,
+                                 tr("Save Database"),
+                                 "/home",
+                                 tr("Data base (*.dat)"));
+    #ifdef WIN32
+    QfileName.replace("/", "\\");
+    #endif
+    qDebug()<<"filename is" <<QfileName<<endl;
+    fileName= QfileName.toStdString();
+    if (QfileName.isEmpty())
+    {
+        information="Saving Rainbow table cancelled";
+        this->print(information,0);
+        return;
+    }
+    else
+    {
+        information = "Save database in "+QfileName;
+        this->print(information,0);
+        rainbowtable->saveTable(fileName);
+    }
 }

@@ -208,6 +208,9 @@
     <layout class="QGridLayout" name="gridLayout">
      <item row="0" column="0">
       <widget class="QPushButton" name="StartGeneration">
+       <property name="statusTip">
+        <string>Start generating a rainbow table with the current settings</string>
+       </property>
        <property name="text">
         <string>Start Generation</string>
        </property>
@@ -218,6 +221,9 @@
      </item>
      <item row="0" column="1">
       <widget class="QPushButton" name="StartCrack">
+       <property name="statusTip">
+        <string>Crack the given hash value with currently loaded rainbow table</string>
+       </property>
        <property name="text">
         <string>Start Crack</string>
        </property>
@@ -225,6 +231,9 @@
      </item>
      <item row="1" column="0">
       <widget class="QPushButton" name="pushButton_4">
+       <property name="statusTip">
+        <string>Embark on a demonstration step-by-step</string>
+       </property>
        <property name="text">
         <string>One Step Crack Demonstration</string>
        </property>
@@ -232,6 +241,9 @@
      </item>
      <item row="1" column="1">
       <widget class="QPushButton" name="pushButton_3">
+       <property name="statusTip">
+        <string>Show how long the last crack  took</string>
+       </property>
        <property name="text">
         <string>Statistics</string>
        </property>
