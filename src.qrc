@@ -4,5 +4,6 @@
         <file>images/Information.png</file>
         <file>images/Save.png</file>
         <file>images/Start.png</file>
+        <file>images/Rainbow.png</file>
     </qresource>
 </RCC>

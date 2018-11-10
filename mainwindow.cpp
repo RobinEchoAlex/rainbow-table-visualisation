@@ -21,8 +21,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui.setupUi(this);
 
     QTextBrowser textBrowser;
+    QIcon icon(":/icon/images/Rainbow.png");
 
-    setWindowTitle(tr("Main Window"));
+    setWindowTitle(tr("Rainbow Table"));
+    setFixedSize(980,620);
+    setWindowIcon(icon);
 
     openAction = new QAction(QIcon(":/icon/images/Open.png"), tr("&Open"), this);
     openAction->setShortcuts(QKeySequence::Open);
