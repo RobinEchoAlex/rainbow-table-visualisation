@@ -1,5 +1,15 @@
 <RCC>
-    <qresource prefix="/images">
-        <file alias="OpenFile">Open.png</file>
+    <qresource prefix="/images"/>
+    <qresource prefix="/">
+        <file>images/Open.png</file>
+        <file>main.cpp</file>
+        <file>mainwindow.cpp</file>
+        <file>mainwindow.h</file>
+        <file>Md5.cpp</file>
+        <file>MD5.h</file>
+        <file>rainbowtable.cpp</file>
+        <file>rainbowtable.h</file>
+        <file>sha1.cpp</file>
+        <file>sha1.hpp</file>
     </qresource>
 </RCC>

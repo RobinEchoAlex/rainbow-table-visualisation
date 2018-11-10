@@ -46,7 +46,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
-    res.qrc
+    src.qrc
 
 DISTFILES += \
     TO-DO_List

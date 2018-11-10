@@ -21,23 +21,30 @@ MainWindow::MainWindow(QWidget *parent) :
 
     setWindowTitle(tr("Main Window"));
 
-    openAction = new QAction(QIcon(":/images/OpenFile"), tr("&Open"), this);
+    openAction = new QAction(QIcon(":/icon/images/Open.png"), tr("&Open"), this);
     openAction->setShortcuts(QKeySequence::Open);
     openAction->setStatusTip(tr("Open an existing rainbow table"));
     connect(openAction, &QAction::triggered,rainbowtable, &Rainbowtable::loadExistedTable);
 
-    saveAction = new QAction(QIcon(":/images/SaveFile"),tr("&Save"),this);
+    saveAction = new QAction(QIcon(":/icon/images/Save.png"),tr("&Save"),this);
     saveAction->setShortcut(QKeySequence::Save);
     saveAction->setStatusTip(tr("Save the rainbow table"));
     connect(saveAction, &QAction::triggered, rainbowtable, &Rainbowtable::saveTable);
 
+    aboutAction = new QAction(QIcon(":/icon/images/Information.png"),tr("&Information"),this);
+    aboutAction->setShortcut(QKeySequence::HelpContents);
+    aboutAction->setStatusTip(tr("Information about this program"));
+    //connect(saveAction, &QAction::triggered, rainbowtable, &Rainbowtable::saveTable);
+
     QMenu *file = menuBar()->addMenu(tr("&File"));
     file->addAction(openAction);
     file->addAction(saveAction);
+    file->addAction(aboutAction);
 
     QToolBar *toolBar = addToolBar(tr("&File"));
     toolBar->addAction(openAction);
     toolBar->addAction(saveAction);
+    toolBar->addAction(aboutAction);
 
     connect(rainbowtable, &Rainbowtable::newText, this, &MainWindow::print);
 

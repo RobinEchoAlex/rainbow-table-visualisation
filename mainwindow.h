@@ -24,6 +24,7 @@ public:
 
     QAction *openAction;
     QAction *saveAction;
+    QAction *aboutAction;
     QButtonGroup group;
 
 private:
