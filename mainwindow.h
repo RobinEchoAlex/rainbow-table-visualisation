@@ -3,6 +3,8 @@
 #include <QMainWindow>
 #include <ui_mainwindow.h>
 #include "rainbowtable.h"
+#include <QButtonGroup>
+
 namespace Ui
 {
 class MainWindow;
@@ -22,6 +24,7 @@ public:
 
     QAction *openAction;
     QAction *saveAction;
+    QButtonGroup group;
 
 private:
 void openFile();
@@ -32,7 +35,6 @@ Ui::MainWindow ui;
 private slots:
 void on_StartGeneration_clicked();
 void on_StartCrack_clicked();
-
 
 };
 

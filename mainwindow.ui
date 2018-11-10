@@ -92,11 +92,11 @@
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
-           <widget class="QGroupBox" name="groupBox_5">
+           <widget class="QGroupBox" name="AlgorithmGroup">
             <property name="title">
              <string>Algorithm</string>
             </property>
-            <widget class="QRadioButton" name="radioButton">
+            <widget class="QRadioButton" name="MD5Sel">
              <property name="geometry">
               <rect>
                <x>20</x>
@@ -109,7 +109,7 @@
               <string>MD5</string>
              </property>
             </widget>
-            <widget class="QRadioButton" name="radioButton_2">
+            <widget class="QRadioButton" name="SHA1Sel">
              <property name="geometry">
               <rect>
                <x>20</x>
@@ -166,8 +166,8 @@
               <rect>
                <x>90</x>
                <y>30</y>
-               <width>72</width>
-               <height>15</height>
+               <width>16</width>
+               <height>16</height>
               </rect>
              </property>
              <property name="text">

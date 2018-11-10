@@ -5,6 +5,7 @@
 #include <QToolBar>
 #include <QDebug>
 #include <QTextBrowser>
+#include <QButtonGroup>
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
 #include "rainbowtable.h"
@@ -38,9 +39,12 @@ MainWindow::MainWindow(QWidget *parent) :
     toolBar->addAction(openAction);
     toolBar->addAction(saveAction);
 
-    //connect(ui.StartGeneration,&QPushButton::click,rainbowtable,&Rainbowtable::generate);
-    //connect(ui.StartGeneration,&QPushButton::click,this,&MainWindow::test);
     connect(rainbowtable, &Rainbowtable::newText, this, &MainWindow::print);
+
+    group.addButton(ui.MD5Sel,0);//set label for radio button
+    group.addButton(ui.SHA1Sel,1);
+    ui.MD5Sel->setChecked(true);
+    ui.SHA1Sel->setChecked(true);
 
     qDebug() << "Mainwindow(QWidget *parent) End" <<endl;
     statusBar() ;
@@ -73,7 +77,7 @@ void MainWindow::print(QString & name,int status)
     }
     else
     {
-        QColor  clrR(0,0,0);//Colour is set to black
+        QColor clrR(0,0,0);//Colour is set to black
         stringToHtmlFilter(name);
         stringToHtml(name,clrR);
         ui.textBrowser->insertHtml("<br />");
@@ -101,23 +105,33 @@ void MainWindow::stringToHtml(QString &str,QColor crl)
      array.append(crl.green());
      array.append(crl.blue());
      QString strC(array.toHex());
-     str = QString("<span style=\" color:#%1;\">%2</span>").arg(strC).arg(str);
+     str = QString("<spanT style=\" color:#%1;\">%2</span>").arg(strC).arg(str);
  }
 void MainWindow::on_StartGeneration_clicked()
 {
     int lowMargin;
     int upMargin;
+    int a;
 
     lowMargin=ui.lowMargin->value();
     upMargin=ui.upMargin->value();
-    rainbowtable->generate(lowMargin,upMargin);
+    a=group.checkedId();
+
+    if (a==0) rainbowtable->generate(lowMargin,upMargin,"MD5");
+    else if (a==1) rainbowtable->generate(lowMargin,upMargin,"SHA1");
 }
 
 void MainWindow::on_StartCrack_clicked()
 {
     std::string Hash;
     QString QHash;
+    int a;
+
+    a=group.checkedId();
     QHash = ui.HashValue->text();
+    QHash = QHash.simplified();//Remove whiteSpace at the end of the qhash
     Hash = QHash.toStdString();
-    rainbowtable->query(Hash);
+
+     if (a==0) rainbowtable->query(Hash,"MD5");
+     else if (a==1) rainbowtable->query(Hash,"SHA1");
 }

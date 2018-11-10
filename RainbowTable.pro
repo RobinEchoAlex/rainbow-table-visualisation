@@ -28,12 +28,14 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     Md5.cpp \
-    rainbowtable.cpp
+    rainbowtable.cpp \
+    sha1.cpp
 
 HEADERS += \
         mainwindow.h \
     MD5.h \
-    rainbowtable.h
+    rainbowtable.h \
+    sha1.hpp
 
 FORMS += \
         mainwindow.ui
@@ -45,3 +47,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     res.qrc
+
+DISTFILES += \
+    TO-DO_List
