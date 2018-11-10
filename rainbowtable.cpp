@@ -16,7 +16,7 @@
 
 #define lengthOfword 5
 
-void Rainbowtable::generate(int lowMargin, int upMargin,std::string mode)
+void Rainbowtable::generate(int lowMargin, int upMargin,QString mode,QString container)
 {
     SHA1 sha1;
     QString QTransferString;
@@ -26,69 +26,71 @@ void Rainbowtable::generate(int lowMargin, int upMargin,std::string mode)
     if(whatisstored!=mode)
     {
         frontEndNode.clear( );
+        HashFrontEndNode.clear();
         whetherCalculated.clear( );
+        HashWhetherCalculated.clear();
         whatisstored=mode;
     }
 
     for(int i=lowMargin; i<=upMargin; i++)
+    {
+        FString = QString::number(i);
+        QTransferString= "Now the word encrypted is "+FString ;
+        send(QTransferString,0);
+        if ((whetherCalculated[intToString(i)]==true && container.compare("map")==0)
+                ||(HashWhetherCalculated.value(QString::number(i))==true && container.compare("hash")==1))
         {
-            FString = QString::number(i);
-            QTransferString= "Now the word encrypted is "+FString ;
-            send(QTransferString,0);
-            if (whetherCalculated[intToString(i)]==1)
-            {
-                continue;
-            }
-            else
-            {
-                std::stringstream ss;
-                ss<<i;
-                std::string str = ss.str();
-
-                int j=0;
-                std::string rstr="0";
-                std::string hashStr;
-                char buf[lengthOfword];
-
-                while(j<lengthOfChain)//Fixed-length chain mode
-                {
-                    if(j==0)
-                    {
-                        if(mode=="MD5") hashStr = md5(str);
-                        else if (mode=="SHA1")
-                        {
-                            sha1.update(str);
-                            hashStr = sha1.final();
-                        }
-                        setwhetherCalculated(str);
-                    }
-                    else
-                    {
-                        if(mode=="MD5") hashStr = md5(rstr);
-                        else if (mode=="SHA1")
-                        {
-                            sha1.update(rstr);
-                            hashStr = sha1.final();
-                        }
-                    }
-                    FString = QString::fromStdString(hashStr);
-                    QTransferString= "Its hash String is " + FString;
-                    send(QTransferString,0);
-                    //cout<<"rstr is"<<rstr<<endl;
-                    rstr=R(hashStr);
-                    this->setwhetherCalculated(rstr);
-                    //cout<<"rstr passed back is "<<rstr<<endl;
-                    j++;
-                }
-                setFrontEndNodPair(str,rstr);
-            }
+            continue;
         }
-        send("generate successfully",1);
+        else
+        {
+            std::stringstream ss;
+            ss<<i;
+            std::string str = ss.str();
+
+            int j=0;
+            std::string rstr="0";
+            std::string hashStr;
+            char buf[lengthOfword];
+
+            while(j<lengthOfChain)//Fixed-length chain mode
+            {
+                if(j==0)
+                {
+                    if(mode=="MD5") hashStr = md5(str);
+                    else if (mode=="SHA1")
+                    {
+                        sha1.update(str);
+                        hashStr = sha1.final();
+                    }
+                    setwhetherCalculated(str,container);
+                }
+                else
+                {
+                    if(mode=="MD5") hashStr = md5(rstr);
+                    else if (mode=="SHA1")
+                    {
+                        sha1.update(rstr);
+                        hashStr = sha1.final();
+                    }
+                }
+                FString = QString::fromStdString(hashStr);
+                QTransferString= "Its hash String is " + FString;
+                send(QTransferString,0);
+                rstr=R(hashStr);
+                this->setwhetherCalculated(rstr,container);
+                j++;
+            }
+            setFrontEndNodPair(str,rstr,container);
+        }
+    }
+    send("generate successfully",1);
 }
 
-void Rainbowtable::setwhetherCalculated(std::string str)
+void Rainbowtable::setwhetherCalculated(std::string str,QString container)
 {
-    this->whetherCalculated[str]=true;
+    if(container.compare("map")==0) this->whetherCalculated[str]=true;
+    else if(container.compare("hash")==0) this->HashWhetherCalculated[QString::fromStdString(str)]=true;
 }
 
 std::string Rainbowtable::intToString(int i)
@@ -100,9 +102,10 @@ std::string Rainbowtable::intToString(int i)
     return result;
 }
 
-void Rainbowtable::setFrontEndNodPair(std::string frontNode,std::string endNode)
+void Rainbowtable::setFrontEndNodPair(std::string frontNode,std::string endNode,QString container)
 {
-    frontEndNode[endNode]=frontNode;
+    if(container=="map") frontEndNode[endNode]=frontNode;
+    else if(container=="hash") HashFrontEndNode[QString::fromStdString(endNode)]=frontNode;
 }
 
 std::string Rainbowtable::R(std::string hashStr)
@@ -127,7 +130,7 @@ std::string Rainbowtable::R(std::string hashStr)
 }
 
 
-void Rainbowtable::chainDeduction(std::string queryHash,std::string frontNode,std::string mode)
+void Rainbowtable::chainDeduction(std::string queryHash,std::string frontNode,QString mode)
 {
     SHA1 sha1;
     std::string currentNode;
@@ -140,7 +143,11 @@ void Rainbowtable::chainDeduction(std::string queryHash,std::string frontNode,st
     while(true)
     {
         if(mode=="MD5") hashValue = md5(currentNode);
-        else if (mode=="SHA1") {sha1.update(currentNode); hashValue=sha1.final();}
+        else if (mode=="SHA1")
+        {
+            sha1.update(currentNode);
+            hashValue=sha1.final();
+        }
         if(hashValue==queryHash) break;
         currentNode = R(hashValue);
     }
@@ -152,7 +159,7 @@ void Rainbowtable::chainDeduction(std::string queryHash,std::string frontNode,st
     send(QTransferString,1);
 }
 
-void Rainbowtable::query(std::string hashValue,std::string mode)
+void Rainbowtable::query(std::string hashValue,QString mode,QString container)
 {
     SHA1 sha1;
     std::string tmpHashValue;
@@ -173,15 +180,21 @@ void Rainbowtable::query(std::string hashValue,std::string mode)
             {
                 rResult=R(tmpHashValue);
                 if(mode=="MD5") tmpHashValue=md5(rResult);
-                else if(mode=="SHA1") {sha1.update(rResult); tmpHashValue=sha1.final();}
+                else if(mode=="SHA1")
+                {
+                    sha1.update(rResult);
+                    tmpHashValue=sha1.final();
+                }
                 i++;
             }
             rResult=R(tmpHashValue);
         }
-        if(frontEndNode[rResult]!="")//A successful query
+        if((frontEndNode[rResult]!="" && container.compare("map")==0)
+                || (HashFrontEndNode.value(QString::fromStdString(rResult))!="" && container.compare("hash")==0))//A successful query
         {
             foundflag=1;
-            frontNode = frontEndNode[rResult];
+            if (container.compare("map")==0) frontNode = frontEndNode[rResult];
+            if (container.compare("hash")==0) frontNode= HashFrontEndNode[QString::fromStdString(rResult)];
             chainDeduction(hashValue,frontNode,mode);
             break;
         }
@@ -190,12 +203,12 @@ void Rainbowtable::query(std::string hashValue,std::string mode)
     if(foundflag==0) send("fail to find the password",1);
 }
 
-void Rainbowtable::saveTable(std::string filename)
+void Rainbowtable::saveTableinMap(std::string filename)
 {
     std::ofstream outfile;
     outfile.open(filename);
     std::map<std::string,std::string>::iterator it;
-    qDebug()<<"Save Begin"<<endl;
+    qDebug()<<"Map Save Begin"<<endl;
     it = this->frontEndNode.begin();
     while(it != frontEndNode.end())
     {
@@ -206,7 +219,22 @@ void Rainbowtable::saveTable(std::string filename)
     outfile.close();
 }
 
-void Rainbowtable::loadExistedTable(std::string filename)
+void Rainbowtable::saveTableinHash(std::string filename)
+{
+    std::ofstream outfile;
+    outfile.open(filename);
+    QHash<QString,std::string>::const_iterator it = HashFrontEndNode.constBegin();
+    qDebug()<<"Hash Save Begin"<<endl;
+    while(it != HashFrontEndNode.constEnd())
+    {
+            outfile<<it.key().toStdString()<<" "<<it.value()<<std::endl;
+            ++it;
+    }
+    send("Table saved successfully.",1);
+    outfile.close();
+}
+
+void Rainbowtable::loadExistedTable(std::string filename,QString container)
 {
     std::ifstream infile;
     std::string endNode;
@@ -228,7 +256,8 @@ void Rainbowtable::loadExistedTable(std::string filename)
         QTransferNode = "Load Node "+ QFrontNode +" "+QEndNode;
         qDebug() << QTransferNode <<endl;
         send(QTransferNode,0);
-        frontEndNode[endNode]=frontNode;
+         if (container.compare("map")==0) frontEndNode[endNode]=frontNode;
+         if (container.compare("hash")==0)  HashFrontEndNode[QString::fromStdString(endNode)]=frontNode;
     }
     send("Load Success",1);
 }

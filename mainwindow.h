@@ -25,7 +25,11 @@ public:
     QAction *openAction;
     QAction *saveAction;
     QAction *aboutAction;
-    QButtonGroup group;
+    QButtonGroup algorithmGroup;
+    QButtonGroup containerGroup;
+
+    QString algorithmList[3];
+    QString containerList[3];
 
 private:
 void openFile();

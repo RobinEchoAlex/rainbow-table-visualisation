@@ -1,10 +1,10 @@
 Add fake-crack detection
 Add one step crack module
 Add statictics
-Formatting using code::blocks
 Globalise, using tr method
-Add file selection module
 Fix the size of the window
 Thread 71
 Hash Storage 38
-try-catch when opening file
+try-catch when openin
+verify if the input is legal
+String -> QString

@@ -56,10 +56,20 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(rainbowtable, &Rainbowtable::newText, this, &MainWindow::print);
 
-    group.addButton(ui.MD5Sel,0);//set label for radio button
-    group.addButton(ui.SHA1Sel,1);
+    //here is the accordance relationship between int label and string argument
+    algorithmGroup.addButton(ui.MD5Sel,0);//set label for algorithm radio button
+    algorithmGroup.addButton(ui.SHA1Sel,1);
     ui.MD5Sel->setChecked(true);
     ui.SHA1Sel->setChecked(true);
+    containerGroup.addButton(ui.MapSel,0);//set label for container radio button
+    containerGroup.addButton(ui.HashSel,1);
+    ui.MapSel->setChecked(true);
+    ui.HashSel->setChecked(true);
+    //Remember to reset the size of relationship array in the header
+    algorithmList[0]="MD5";//uppercase for algorithm
+    algorithmList[1]="SHA1";
+    containerList[0]="map";//lowercase for container
+    containerList[1]="hash";
 
     qDebug() << "Mainwindow(QWidget *parent) End" <<endl;
     statusBar() ;
@@ -122,13 +132,14 @@ void MainWindow::on_StartGeneration_clicked()
     int lowMargin;
     int upMargin;
     int a;
+    int c;
 
     lowMargin=ui.lowMargin->value();
     upMargin=ui.upMargin->value();
-    a=group.checkedId();
+    a=algorithmGroup.checkedId();
+    c=containerGroup.checkedId();
 
-    if (a==0) rainbowtable->generate(lowMargin,upMargin,"MD5");
-    else if (a==1) rainbowtable->generate(lowMargin,upMargin,"SHA1");
+    rainbowtable->generate(lowMargin,upMargin,algorithmList[a],containerList[c]);
 }
 
 void MainWindow::on_StartCrack_clicked()
@@ -136,50 +147,54 @@ void MainWindow::on_StartCrack_clicked()
     std::string Hash;
     QString QHash;
     int a;
+    int c;
 
-    a=group.checkedId();
+    a=algorithmGroup.checkedId();
+    c=containerGroup.checkedId();
     QHash = ui.HashValue->text();
     QHash = QHash.simplified();//Remove whiteSpace at the end of the qhash
     Hash = QHash.toStdString();
 
-    if (a==0) rainbowtable->query(Hash,"MD5");
-    else if (a==1) rainbowtable->query(Hash,"SHA1");
+    rainbowtable->query(Hash,algorithmList[a],containerList[c]);
 }
 
 void MainWindow::about()
 {
     QMessageBox::information(this, tr("About..."), tr("developed by gitee:robinalex\n"
-                                                      "copyright information:\n"
-                                                      "SHA1 Algorithm is in public domain\n"
-                                                      "MD5 Algorithm is Copyright (C) 1991-2, RSA Data Security\n"
-                                                      "All other creations can be distributed under CC BY-SA 4.0\n"))
-            ;
+                             "copyright information:\n"
+                             "SHA1 Algorithm is in public domain\n"
+                             "MD5 Algorithm is Copyright (C) 1991-2, RSA Data Security\n"
+                             "All other creations can be distributed under CC BY-SA 4.0\n"))
+    ;
 }
 
 void MainWindow::load()
 {
+    int c;
     QString QfileName;
     QString information;
     std::string fileName;
     QFileDialog *fileDialog = new QFileDialog(this);
+
     fileDialog->setWindowTitle(tr("Load File"));
     fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
     fileDialog->setFileMode(QFileDialog::AnyFile);
     fileDialog->setViewMode(QFileDialog::Detail);
-
     fileDialog->setGeometry(10,30,300,200);
     fileDialog->setDirectory(".");
+
     QfileName = fileDialog->getOpenFileName(
-                                 this,
-                                 tr("Open File"),
-                                 "/home",
-                                 tr("Data base (*.dat)"));
-    #ifdef WIN32
+                    this,
+                    tr("Open File"),
+                    "/home",
+                    tr("Data base (*.dat)"));
+#ifdef WIN32
     QfileName.replace("/", "\\");    //change format of filename when operate under Windows
-    #endif
+#endif
     qDebug()<<"filename is" <<QfileName<<endl;
     fileName= QfileName.toStdString();
-    if (QfileName.isEmpty())
+
+    if (QfileName.isEmpty()) //user cancelled the request
     {
         information="Open Rainbow table cancelled";
         this->print(information,0);
@@ -187,9 +202,10 @@ void MainWindow::load()
     }
     else
     {
+        c = containerGroup.checkedId();
         information = "File "+QfileName+" open";
         this->print(information,0);
-        rainbowtable->loadExistedTable(fileName);
+        rainbowtable->loadExistedTable(fileName,containerList[c]);
     }
 }
 
@@ -199,22 +215,25 @@ void MainWindow::save()
     QString information;
     std::string fileName;
     QFileDialog *fileDialog = new QFileDialog(this);
+
     fileDialog->setWindowTitle(tr("Save File"));
     fileDialog->setAcceptMode(QFileDialog::AcceptSave);
     fileDialog->setFileMode(QFileDialog::AnyFile);
     fileDialog->setViewMode(QFileDialog::Detail);
     fileDialog->setGeometry(10,30,300,200);
     fileDialog->setDirectory(".");
+
     QfileName = fileDialog->getSaveFileName(
-                                 this,
-                                 tr("Save Database"),
-                                 "/home",
-                                 tr("Data base (*.dat)"));
-    #ifdef WIN32
+                    this,
+                    tr("Save Database"),
+                    "/home",
+                    tr("Data base (*.dat)"));
+#ifdef WIN32
     QfileName.replace("/", "\\");
-    #endif
+#endif
     qDebug()<<"filename is" <<QfileName<<endl;
     fileName= QfileName.toStdString();
+
     if (QfileName.isEmpty())
     {
         information="Saving Rainbow table cancelled";
@@ -225,6 +244,7 @@ void MainWindow::save()
     {
         information = "Save database in "+QfileName;
         this->print(information,0);
-        rainbowtable->saveTable(fileName);
+        if (containerGroup.checkedId()==0) rainbowtable->saveTableinMap(fileName);
+        else if(containerGroup.checkedId()==1) rainbowtable->saveTableinHash(fileName);
     }
 }

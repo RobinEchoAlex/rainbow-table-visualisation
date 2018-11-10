@@ -12,29 +12,33 @@
 #include <QObject>
 #include <ui_mainwindow.h>
 #include <QLabel>
+#include <QHash>
 
 class Rainbowtable: public QObject
 {
     Q_OBJECT
 public :
     Rainbowtable() {}
-    void chainDeduction(std::string queryHash,std::string frontNode,std::string mode);
+    void chainDeduction(std::string queryHash,std::string frontNode,QString mode);
     std::string R(std::string hashStr);
-    void setwhetherCalculated(std::string str);
+    void setwhetherCalculated(std::string str,QString container);
     static std::string intToString(int i);
-    void setFrontEndNodPair(std::string frontNode,std::string endNode);
+    void setFrontEndNodPair(std::string frontNode,std::string endNode,QString container);
     void send(QString sendText,int status);
 
     std::map <std::string, std::string> frontEndNode ;
     std::map <std::string, bool> whetherCalculated;
+    QHash <QString,std::string> HashFrontEndNode;
+    QHash <QString,bool > HashWhetherCalculated;
     int lengthOfChain=3;
-    std::string whatisstored;
+    QString whatisstored;
 
 public slots:
-    void loadExistedTable(std::string filename);
-    void saveTable(std::string filename);
-    void generate(int lowMargin,int upMargin,std::string mode);
-    void query(std::string hashvalue,std::string mode);
+    void loadExistedTable(std::string filename,QString container);
+    void saveTableinMap(std::string filename);
+    void saveTableinHash(std::string filename);
+    void generate(int lowMargin,int upMargin,QString mode,QString container);
+    void query(std::string hashvalue,QString mode,QString container);
 
 signals:
     void newText( QString &name,int status);

@@ -125,6 +125,45 @@
            </widget>
           </item>
           <item>
+           <widget class="QGroupBox" name="ContainerGroup">
+            <property name="title">
+             <string>Container</string>
+            </property>
+            <widget class="QRadioButton" name="MapSel">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>20</y>
+               <width>115</width>
+               <height>19</height>
+              </rect>
+             </property>
+             <property name="statusTip">
+              <string>Choose std::map as storage method</string>
+             </property>
+             <property name="text">
+              <string>Map</string>
+             </property>
+            </widget>
+            <widget class="QRadioButton" name="HashSel">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>50</y>
+               <width>115</width>
+               <height>19</height>
+              </rect>
+             </property>
+             <property name="statusTip">
+              <string>Choose Hash as stroage method</string>
+             </property>
+             <property name="text">
+              <string>Hash</string>
+             </property>
+            </widget>
+           </widget>
+          </item>
+          <item>
            <widget class="QGroupBox" name="Range">
             <property name="title">
              <string>Range</string>
@@ -132,7 +171,7 @@
             <widget class="QSpinBox" name="lowMargin">
              <property name="geometry">
               <rect>
-               <x>20</x>
+               <x>10</x>
                <y>30</y>
                <width>46</width>
                <height>22</height>
@@ -148,7 +187,7 @@
             <widget class="QSpinBox" name="upMargin">
              <property name="geometry">
               <rect>
-               <x>120</x>
+               <x>80</x>
                <y>30</y>
                <width>46</width>
                <height>22</height>
@@ -164,7 +203,7 @@
             <widget class="QLabel" name="connectionLabel">
              <property name="geometry">
               <rect>
-               <x>90</x>
+               <x>60</x>
                <y>30</y>
                <width>16</width>
                <height>16</height>
