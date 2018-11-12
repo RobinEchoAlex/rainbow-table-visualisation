@@ -4,6 +4,7 @@
 #include <ui_mainwindow.h>
 #include "rainbowtable.h"
 #include <QButtonGroup>
+#include <QComboBox>
 
 namespace Ui
 {
@@ -25,6 +26,7 @@ public:
     QAction *openAction;
     QAction *saveAction;
     QAction *aboutAction;
+    QComboBox *languageSelection;
     QButtonGroup algorithmGroup;
     QButtonGroup containerGroup;
 

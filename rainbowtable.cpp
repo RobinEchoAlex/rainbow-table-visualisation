@@ -47,14 +47,17 @@ void Rainbowtable::generate(int lowMargin, int upMargin,QString mode,QString con
             std::stringstream ss;
             ss<<i;
             std::string str = ss.str();
-
+            QString Qstr;
             int j=0;
             std::string rstr="0";
+            QString Qrstr;
             std::string hashStr;
             char buf[lengthOfword];
 
             while(j<lengthOfChain)//Fixed-length chain mode
             {
+                //need to call thread
+                SHA1 sha1;
                 if(j==0)
                 {
                     if(mode=="MD5") hashStr = md5(str);
@@ -75,8 +78,18 @@ void Rainbowtable::generate(int lowMargin, int upMargin,QString mode,QString con
                     }
                 }
                 FString = QString::fromStdString(hashStr);
-                QTransferString= "Its hash String is " + FString;
-                send(QTransferString,0);
+                if (j==0)
+                {
+                    Qstr = QString::fromStdString(str);
+                    QTransferString= Qstr+"'s hash String is " + FString;
+                    send(QTransferString,0);
+                }
+                else
+                {
+                    Qrstr = QString::fromStdString(rstr);
+                    QTransferString=Qrstr +"'s hash String is " + FString;
+                    send(QTransferString,0);
+                }
                 rstr=R(hashStr);
                 this->setwhetherCalculated(rstr,container);
                 j++;
@@ -262,7 +275,7 @@ void Rainbowtable::loadExistedTable(std::string filename,QString container)
     send("Load Success",1);
 }
 
-void Rainbowtable::send(QString sendText,int status)
+void Rainbowtable::send(QString sendText,int status)//send the word to the text display window
 {
     qDebug()<<status<<endl;
     emit newText(sendText,status);

@@ -6,4 +6,7 @@
         <file>images/Start.png</file>
         <file>images/Rainbow.png</file>
     </qresource>
+    <qresource prefix="/lans">
+        <file>lans/zh.ts</file>
+    </qresource>
 </RCC>

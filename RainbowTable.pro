@@ -50,3 +50,6 @@ RESOURCES += \
 
 DISTFILES += \
     TO-DO_List
+
+TRANSLATIONS += zh.ts \
+               en.ts

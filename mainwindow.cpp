@@ -19,8 +19,6 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
     ui.setupUi(this);
-
-    QTextBrowser textBrowser;
     QIcon icon(":/icon/images/Rainbow.png");
 
     setWindowTitle(tr("Rainbow Table"));
@@ -45,9 +43,22 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(aboutAction, &QAction::triggered, this, &MainWindow::about);
 
     QMenu *file = menuBar()->addMenu(tr("&File"));
+    QMenu *languageMenu = menuBar()->addMenu(tr("&Language"));
     file->addAction(openAction);
     file->addAction(saveAction);
     file->addAction(aboutAction);
+
+    /*typedef enum//List of possible language
+    {
+        Chinese,English,
+    }Language;
+    languageSelection->addItem("简体中文",Chinese);
+    languageSelection->addItem("English",English);
+    languageSelection->setItemText(0,"简体中文");
+    languageSelection->setItemText(1,"English");
+    Language language = (Language)(languageSelection->currentIndex());//grab the current choice
+    //connect(languageSelection,SIGNAL(currentIndexChanged(int)),this,SLOT(changeLanguage(int)));
+    */
 
     QToolBar *toolBar = addToolBar(tr("&File"));
     toolBar->addAction(openAction);
@@ -248,3 +259,4 @@ void MainWindow::save()
         else if(containerGroup.checkedId()==1) rainbowtable->saveTableinHash(fileName);
     }
 }
+

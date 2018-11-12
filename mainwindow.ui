@@ -10,6 +10,12 @@
     <height>611</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
@@ -17,10 +23,10 @@
    <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>260</y>
+      <x>10</x>
+      <y>280</y>
       <width>491</width>
-      <height>281</height>
+      <height>311</height>
      </rect>
     </property>
     <property name="title">
@@ -42,7 +48,7 @@
      <rect>
       <x>520</x>
       <y>10</y>
-      <width>421</width>
+      <width>431</width>
       <height>251</height>
      </rect>
     </property>
@@ -222,86 +228,198 @@
      </layout>
     </widget>
    </widget>
-   <widget class="QProgressBar" name="progressBar">
-    <property name="geometry">
-     <rect>
-      <x>500</x>
-      <y>280</y>
-      <width>461</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="value">
-     <number>0</number>
-    </property>
-   </widget>
-   <widget class="QWidget" name="gridLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>510</x>
-      <y>320</y>
-      <width>431</width>
-      <height>271</height>
-     </rect>
-    </property>
-    <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0">
-      <widget class="QPushButton" name="StartGeneration">
-       <property name="statusTip">
-        <string>Start generating a rainbow table with the current settings</string>
-       </property>
-       <property name="text">
-        <string>Start Generation</string>
-       </property>
-       <property name="shortcut">
-        <string>Return</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QPushButton" name="StartCrack">
-       <property name="statusTip">
-        <string>Crack the given hash value with currently loaded rainbow table</string>
-       </property>
-       <property name="text">
-        <string>Start Crack</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QPushButton" name="pushButton_4">
-       <property name="statusTip">
-        <string>Embark on a demonstration step-by-step</string>
-       </property>
-       <property name="text">
-        <string>One Step Crack Demonstration</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QPushButton" name="pushButton_3">
-       <property name="statusTip">
-        <string>Show how long the last crack  took</string>
-       </property>
-       <property name="text">
-        <string>Statistics</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
    <widget class="QGroupBox" name="groupBox_7">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>30</y>
-      <width>511</width>
-      <height>221</height>
+      <y>20</y>
+      <width>491</width>
+      <height>241</height>
      </rect>
     </property>
     <property name="title">
      <string>One Step Crack Demonstration</string>
     </property>
+    <widget class="QWidget" name="horizontalLayoutWidget_2">
+     <property name="geometry">
+      <rect>
+       <x>17</x>
+       <y>38</y>
+       <width>471</width>
+       <height>91</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_2">
+    <property name="geometry">
+     <rect>
+      <x>520</x>
+      <y>280</y>
+      <width>431</width>
+      <height>301</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Control Unit</string>
+    </property>
+    <widget class="QWidget" name="gridLayoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>-20</x>
+       <y>20</y>
+       <width>471</width>
+       <height>281</height>
+      </rect>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="1" column="0">
+       <widget class="QPushButton" name="pushButton_4">
+        <property name="minimumSize">
+         <size>
+          <width>233</width>
+          <height>60</height>
+         </size>
+        </property>
+        <property name="statusTip">
+         <string>Embark on a demonstration step-by-step</string>
+        </property>
+        <property name="text">
+         <string>One Step Crack Demonstration</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QPushButton" name="pushButton_3">
+        <property name="minimumSize">
+         <size>
+          <width>144</width>
+          <height>60</height>
+         </size>
+        </property>
+        <property name="statusTip">
+         <string>Show how long the last crack  took</string>
+        </property>
+        <property name="text">
+         <string>Statistics</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QPushButton" name="StartCrack">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>168</horstretch>
+          <verstretch>60</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>144</width>
+          <height>60</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>144</width>
+          <height>60</height>
+         </size>
+        </property>
+        <property name="statusTip">
+         <string>Crack the given hash value with currently loaded rainbow table</string>
+        </property>
+        <property name="text">
+         <string>Start Crack</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QPushButton" name="StartGeneration">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>88</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>233</width>
+          <height>60</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>233</width>
+          <height>60</height>
+         </size>
+        </property>
+        <property name="statusTip">
+         <string>Start generating a rainbow table with the current settings</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="text">
+         <string>Start Generation</string>
+        </property>
+        <property name="shortcut">
+         <string>Return</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </widget>
   </widget>
  </widget>

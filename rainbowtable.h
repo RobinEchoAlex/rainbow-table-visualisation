@@ -13,6 +13,7 @@
 #include <ui_mainwindow.h>
 #include <QLabel>
 #include <QHash>
+#include <QThread>
 
 class Rainbowtable: public QObject
 {

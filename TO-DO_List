@@ -1,10 +1,21 @@
+Add another R function
+-improve to in accordance with the [,]
+
 Add fake-crack detection
+-when two R function projects to one value
+
 Add one step crack module
+-using label to specify
+
 Add statictics
-Globalise, using tr method
-Fix the size of the window
+-time function records time used
+-record the time that collapse?
+
 Thread 71
-Hash Storage 38
-try-catch when openin
-verify if the input is legal
-String -> QString
+-R->thread (using connect?)
+
+https:/ /www.zhihu.com/question/19790488对于这个问题，2003年提出的彩虹
+表算法进行了针对性的改进。它在各步的运算中，并不使用统一的R函数，而是分别
+使用R共k个不同的R函数（下划线表示下标）。这样生成的哈希链集即被称为彩虹表。
+（在不同的运算位置使用不同的R函数，就像彩虹由内而外的不同位置上显示出不
+同的颜色一样。）这样一来，如果发生碰撞，通常会是下图的情况：
