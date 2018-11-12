@@ -13,6 +13,7 @@
 #include <QDir>
 #include <QFileDialog>
 #include "mainwindow.h"
+#include <windows.h>
 
 #define lengthOfWord 5
 
@@ -21,7 +22,11 @@ void Rainbowtable::generate(int lowMargin, int upMargin,QString mode,QString con
     SHA1 sha1;
     QString QTransferString;
     QString FString;
+    unsigned long timeStart;
+    unsigned long timeEnd;
+
     sendToBrowser("Generation start now:",1);
+    timeStart = GetTickCount();
 
     if(whatisstored!=mode)
     {
@@ -78,6 +83,7 @@ void Rainbowtable::generate(int lowMargin, int upMargin,QString mode,QString con
                     }
                 }
                 FString = QString::fromStdString(hashStr);
+                //Information displayed on text browser start
                 if (j==0)
                 {
                     Qstr = QString::fromStdString(str);
@@ -90,14 +96,34 @@ void Rainbowtable::generate(int lowMargin, int upMargin,QString mode,QString con
                     QTransferString=Qrstr +"'s hash String is " + FString;
                     sendToBrowser(QTransferString,0);
                 }
+                //Information displayed on text browser end
                 rstr=R_numberFilter(hashStr,j);
                 this->setwhetherCalculated(rstr,container);
                 j++;
             }
             setFrontEndNodPair(str,rstr,container);
+             // modify demo start
+            if(i==lowMargin)
+            {
+                sendToDemo("FN1",QString::fromStdString(str));
+                sendToDemo("EN1",QString::fromStdString(rstr));
+            }
+            else if(i==lowMargin+1)
+            {
+                sendToDemo("FN2",QString::fromStdString(str));
+                sendToDemo("EN2",QString::fromStdString(rstr));
+            }
+            else if(i==upMargin)
+            {
+                sendToDemo("FNE",QString::fromStdString(str));
+                sendToDemo("ENE",QString::fromStdString(rstr));
+            }
+            // modify demo end
         }
     }
     sendToBrowser("generate successfully",1);
+    timeEnd = GetTickCount();
+    this->generationTime = timeEnd - timeStart;
 }
 
 void Rainbowtable::setwhetherCalculated(std::string str,QString container)
@@ -173,6 +199,7 @@ void Rainbowtable::chainDeduction(std::string queryHash,std::string frontNode,QS
     sendToBrowser("Congratulation!",1);
     sendToBrowser(QTransferString,1);
     sendToDemo("RealValue",QCurrentNode);
+    sendToDemo("MatchOrNot","Match!");
 }
 
 void Rainbowtable::query(std::string hashValue,QString mode,QString container)
@@ -186,7 +213,7 @@ void Rainbowtable::query(std::string hashValue,QString mode,QString container)
     int i=0;
     const int chainLength=3; //specify the x of Rx function we are using, cause the query process is going backward
 
-    while(counter<lengthOfChain)//<= ? <
+    while(counter<lengthOfChain)
     {
         if(counter==0) rResult=R_numberFilter(hashValue,chainLength-1);//using the origin value to deduce
         else//using the temp hash value to deduce
@@ -217,7 +244,10 @@ void Rainbowtable::query(std::string hashValue,QString mode,QString container)
         }
         else counter++;//query continue
     }
-    if(foundflag==0) sendToBrowser("Fail to find the password",1);
+    if(foundflag==0)
+    {
+        sendToBrowser("Fail to find the password",1);
+    }
 }
 
 void Rainbowtable::saveTableinMap(std::string filename)
@@ -331,6 +361,8 @@ void Rainbowtable::demo(std::string hashValue,QString mode,QString container)
         if((frontEndNode[rResult]!="" && container.compare("map")==0)
                 || (HashFrontEndNode.value(QString::fromStdString(rResult))!="" && container.compare("hash")==0))//A successful query
         {
+            if(counter==0) sendToDemo("OKOrNot","OK");
+            else sendToDemo("OKOrNot","Fail");
             information = "R"+QString::number(chainLength-(i+1));//since the i has been ++ at the last step, +1 instead of +2
             sendToDemo("Rx",information);
             foundflag=1;
@@ -341,5 +373,9 @@ void Rainbowtable::demo(std::string hashValue,QString mode,QString container)
         }
         else counter++;//query continue
     }
-    if(foundflag==0) sendToBrowser("Fail to find the password",1);
+    if(foundflag==0)
+    {
+        sendToDemo("OKOrNot2","Fail");
+        sendToDemo("MatchOrNot","Fail");
+    }
 }

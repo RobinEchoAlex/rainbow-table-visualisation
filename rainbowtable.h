@@ -37,6 +37,7 @@ public :
     QString whatisstored;
     int lengthofUpperLimit;
     int lengthofLowerLimit;
+    unsigned generationTime;
 
 public slots:
     void loadExistedTable(std::string filename,QString container);

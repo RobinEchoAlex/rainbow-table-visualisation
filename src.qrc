@@ -5,6 +5,9 @@
         <file>images/Save.png</file>
         <file>images/Start.png</file>
         <file>images/Rainbow.png</file>
+        <file>images/LeftArrow.png</file>
+        <file>images/RightArrow.png</file>
+        <file>images/Language.png</file>
     </qresource>
     <qresource prefix="/lans">
         <file>zh.qm</file>

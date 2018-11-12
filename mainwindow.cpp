@@ -5,6 +5,7 @@
 #include <QToolBar>
 #include <QDebug>
 #include <QTextBrowser>
+#include <time.h>
 #include <QButtonGroup>
 #include <QDir>
 #include <QTranslator>
@@ -26,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QIcon icon(":/icon/images/Rainbow.png");
 
     setWindowTitle(tr("Rainbow Table"));
-    setFixedSize(980,620);
+    setFixedSize(980,700);
     setWindowIcon(icon);
 
     openAction = new QAction(QIcon(":/icon/images/Open.png"), tr("&Open"), this);
@@ -45,7 +46,7 @@ MainWindow::MainWindow(QWidget *parent) :
     aboutAction->setStatusTip(tr("Information about this program"));
     connect(aboutAction, &QAction::triggered, this, &MainWindow::about);
 
-    languageAction = new QAction(QIcon(":/icon/images/Information.png"),tr("&Language"),this);
+    languageAction = new QAction(QIcon(":/icon/images/Language.png"),tr("&Language"),this);
     languageAction->setShortcut(QKeySequence::Backspace);
     languageAction->setStatusTip((tr("Choose language")));
     connect(languageAction,&QAction::triggered,this,&MainWindow::languageSelection);
@@ -168,7 +169,7 @@ void MainWindow::on_StartCrack_clicked()
     Hash = QHash.toStdString();
 
     Information= tr("Please enter a valid hash in the box");
-    if(Hash.length()<=2)
+    if(Hash.length()<=10)
     {
         print(Information,0);//too short to be a hash
         return;
@@ -282,6 +283,7 @@ void MainWindow::on_OSCD_clicked()
 {
     std::string Hash;
     QString QHash;
+    QString Information;
     int a;
     int c;
 
@@ -291,29 +293,82 @@ void MainWindow::on_OSCD_clicked()
     QHash = QHash.simplified();//Remove whiteSpace at the end of the qhash
     Hash = QHash.toStdString();
 
+    Information= tr("Please enter a valid hash in the box");//Can be integrated with query
+    if(Hash.length()<=10)
+    {
+        print(Information,0);//too short to be a hash
+        return;
+    }
     rainbowtable->demo(Hash,algorithmList[a],containerList[c]);
 }
 
 void MainWindow::demoPrint(QString information,QString label)
 {
+    QPalette pe;
+    pe.setColor(QPalette::WindowText,Qt::red);
     qDebug()<<"demo was called error-freee"<<endl;
     if(label.compare("Value1")==0)
     {
         ui.Value1->setText(information);
+        ui.Value1->setPalette(pe);
     }
     else if(label.compare("Rx")==0)
     {
         ui.Rx->setText(information);
+        ui.Rx->setPalette(pe);
     }
     else if(label.compare("RealValue")==0)
     {
         ui.RealValue->setText(information);
+        ui.RealValue->setPalette(pe);
     }
+    else if(label.compare("FN1")==0)
+    {
+        ui.FrontNode1->setText(information);
+    }
+    else if(label.compare("FN2")==0)
+    {
+        ui.FrontNode2->setText(information);
+    }
+    else if(label.compare("FNE")==0)
+    {
+        ui.FrontNodeEnd->setText(information);
+    }
+    else if(label.compare("EN1")==0)
+    {
+        ui.EndNode1->setText(information);
+    }
+    else if(label.compare("EN2")==0)
+    {
+        ui.EndNode2->setText(information);
+    }
+    else if(label.compare("ENE")==0)
+    {
+        ui.EndNodeEnd->setText(information);
+    }
+    else if(label.compare("OKOrNot")==0)
+    {
+        ui.OKOrNot1->setText(information);
+        ui.OKOrNot1->setPalette(pe);
+    }
+    else if(label.compare("OKOrNot2")==0)
+    {
+        ui.OKOrNot2->setText(information);
+        ui.OKOrNot2->setPalette(pe);
+    }
+    else if(label.compare("MatchOrNot")==0)
+    {
+        ui.MatchOrNot->setText(information);
+        ui.MatchOrNot->setPalette(pe);
+    }
+
 }
 
 void MainWindow::on_Statistics_clicked()
 {
-    QMessageBox::information(this, tr("About..."), tr("Current chain length:3"));
+    QMessageBox::information(this, tr("About..."), tr("Current chain length:3\n")
+                                                    +tr("Time spend on last generation is :\n")
+                                                    +QString::number(rainbowtable->generationTime));
 }
 
 void MainWindow::languageSelection()
