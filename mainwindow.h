@@ -43,7 +43,9 @@ void about();
 void save();
 void languageSelection();
 int getLength(int x);
+void show_hide(QLabel *label);
 Ui::MainWindow ui;
+QTimer *timer;
 
 private slots:
 void on_StartGeneration_clicked();

@@ -2,6 +2,7 @@
 #include <QMenuBar>
 #include <QMessageBox>
 #include <QStatusBar>
+#include <QTimer>
 #include <QToolBar>
 #include <QDebug>
 #include <QTextBrowser>
@@ -306,7 +307,7 @@ void MainWindow::demoPrint(QString information,QString label)
 {
     QPalette pe;
     pe.setColor(QPalette::WindowText,Qt::red);
-    qDebug()<<"demo was called error-freee"<<endl;
+
     if(label.compare("Value1")==0)
     {
         ui.Value1->setText(information);
@@ -370,7 +371,7 @@ void MainWindow::on_Statistics_clicked()
     qDebug()<<rainbowtable->generationTime<<endl;
     qDebug()<<time<<endl;
     QMessageBox::information(this, tr("About..."), tr("Current chain length:3\n")
-                                                    +tr("Time spend on last generation : \n")
+                                                    +tr("Time spend on last generation : ")
                                                     +QString::number(time,'f',3)
                                                     +tr("s\n")
                                                     +tr("The number of chain save by mid-storing : ")
