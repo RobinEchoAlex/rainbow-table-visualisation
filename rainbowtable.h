@@ -21,7 +21,7 @@ class Rainbowtable: public QObject
 public :
     Rainbowtable() {}
     void chainDeduction(std::string queryHash,std::string frontNode,QString mode);
-    std::string R(std::string hashStr);
+    std::string R_numberFilter(std::string hashStr,int deviation);
     void setwhetherCalculated(std::string str,QString container);
     static std::string intToString(int i);
     void setFrontEndNodPair(std::string frontNode,std::string endNode,QString container);
