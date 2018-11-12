@@ -20,13 +20,14 @@ public:
     void open();
     void openFile(Rainbowtable rainbowtable);
     void print( QString & name,int status);
+    void demoPrint(QString information,QString label);
     void stringToHtmlFilter(QString &str);
     void stringToHtml(QString &str,QColor crl);
 
     QAction *openAction;
     QAction *saveAction;
     QAction *aboutAction;
-    QComboBox *languageSelection;
+    QAction *languageAction;
     QButtonGroup algorithmGroup;
     QButtonGroup containerGroup;
 
@@ -40,12 +41,15 @@ void test();
 void load();
 void about();
 void save();
+void languageSelection();
+int getLength(int x);
 Ui::MainWindow ui;
 
 private slots:
 void on_StartGeneration_clicked();
 void on_StartCrack_clicked();
-
+void on_OSCD_clicked();
+void on_Statistics_clicked();
 };
 
 #endif

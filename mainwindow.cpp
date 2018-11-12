@@ -1,4 +1,4 @@
-#include <QAction>
+﻿#include <QAction>
 #include <QMenuBar>
 #include <QMessageBox>
 #include <QStatusBar>
@@ -7,8 +7,12 @@
 #include <QTextBrowser>
 #include <QButtonGroup>
 #include <QDir>
+#include <QTranslator>
+#include <QMainWindow>
 #include <QFileDialog>
+#include <QInputDialog>
 #include <string>
+#include <windows.h>
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
 #include "rainbowtable.h"
@@ -31,7 +35,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(openAction, &QAction::triggered,this, &MainWindow::load);
     //QString Directory = QDir::toNativeSeparators(QFileDialog::getExistingDirectory(this,tr("load file"),QDir::currentPath()));
 
-
     saveAction = new QAction(QIcon(":/icon/images/Save.png"),tr("&Save"),this);
     saveAction->setShortcut(QKeySequence::Save);
     saveAction->setStatusTip(tr("Save the rainbow table"));
@@ -42,23 +45,17 @@ MainWindow::MainWindow(QWidget *parent) :
     aboutAction->setStatusTip(tr("Information about this program"));
     connect(aboutAction, &QAction::triggered, this, &MainWindow::about);
 
+    languageAction = new QAction(QIcon(":/icon/images/Information.png"),tr("&Language"),this);
+    languageAction->setShortcut(QKeySequence::Backspace);
+    languageAction->setStatusTip((tr("Choose language")));
+    connect(languageAction,&QAction::triggered,this,&MainWindow::languageSelection);
+
     QMenu *file = menuBar()->addMenu(tr("&File"));
-    QMenu *languageMenu = menuBar()->addMenu(tr("&Language"));
+    QMenu *settingMenu = menuBar()->addMenu(tr("&Setting"));
     file->addAction(openAction);
     file->addAction(saveAction);
     file->addAction(aboutAction);
-
-    /*typedef enum//List of possible language
-    {
-        Chinese,English,
-    }Language;
-    languageSelection->addItem("简体中文",Chinese);
-    languageSelection->addItem("English",English);
-    languageSelection->setItemText(0,"简体中文");
-    languageSelection->setItemText(1,"English");
-    Language language = (Language)(languageSelection->currentIndex());//grab the current choice
-    //connect(languageSelection,SIGNAL(currentIndexChanged(int)),this,SLOT(changeLanguage(int)));
-    */
+    settingMenu->addAction(languageAction);
 
     QToolBar *toolBar = addToolBar(tr("&File"));
     toolBar->addAction(openAction);
@@ -66,6 +63,7 @@ MainWindow::MainWindow(QWidget *parent) :
     toolBar->addAction(aboutAction);
 
     connect(rainbowtable, &Rainbowtable::newText, this, &MainWindow::print);
+    connect(rainbowtable,&Rainbowtable::newDemo,this,&MainWindow::demoPrint);
 
     //here is the accordance relationship between int label and string argument
     algorithmGroup.addButton(ui.MD5Sel,0);//set label for algorithm radio button
@@ -150,6 +148,8 @@ void MainWindow::on_StartGeneration_clicked()
     a=algorithmGroup.checkedId();
     c=containerGroup.checkedId();
 
+    rainbowtable->lengthofUpperLimit=this->getLength(upMargin);
+    rainbowtable->lengthofLowerLimit=this->getLength(lowMargin);
     rainbowtable->generate(lowMargin,upMargin,algorithmList[a],containerList[c]);
 }
 
@@ -157,6 +157,7 @@ void MainWindow::on_StartCrack_clicked()
 {
     std::string Hash;
     QString QHash;
+    QString Information;
     int a;
     int c;
 
@@ -166,7 +167,13 @@ void MainWindow::on_StartCrack_clicked()
     QHash = QHash.simplified();//Remove whiteSpace at the end of the qhash
     Hash = QHash.toStdString();
 
-    rainbowtable->query(Hash,algorithmList[a],containerList[c]);
+    Information= tr("Please enter a valid hash in the box");
+    if(Hash.length()<=2)
+    {
+        print(Information,0);//too short to be a hash
+        return;
+    }
+        rainbowtable->query(Hash,algorithmList[a],containerList[c]);
 }
 
 void MainWindow::about()
@@ -260,3 +267,86 @@ void MainWindow::save()
     }
 }
 
+int MainWindow::getLength(int x)
+{
+    int length=0;
+    while(x)
+    {
+        x/=10;
+        length++;
+    }
+    return length;
+}
+
+void MainWindow::on_OSCD_clicked()
+{
+    std::string Hash;
+    QString QHash;
+    int a;
+    int c;
+
+    a=algorithmGroup.checkedId();
+    c=containerGroup.checkedId();
+    QHash = ui.HashValue->text();
+    QHash = QHash.simplified();//Remove whiteSpace at the end of the qhash
+    Hash = QHash.toStdString();
+
+    rainbowtable->demo(Hash,algorithmList[a],containerList[c]);
+}
+
+void MainWindow::demoPrint(QString information,QString label)
+{
+    qDebug()<<"demo was called error-freee"<<endl;
+    if(label.compare("Value1")==0)
+    {
+        ui.Value1->setText(information);
+    }
+    else if(label.compare("Rx")==0)
+    {
+        ui.Rx->setText(information);
+    }
+    else if(label.compare("RealValue")==0)
+    {
+        ui.RealValue->setText(information);
+    }
+}
+
+void MainWindow::on_Statistics_clicked()
+{
+    QMessageBox::information(this, tr("About..."), tr("Current chain length:3"));
+}
+
+void MainWindow::languageSelection()
+{
+
+    QTranslator translator;
+    bool ok;
+    QStringList languages;
+    QString languageSelect;
+    languages<<tr("English")<<tr("简体中文");//update needed if new languages added
+    languageSelect = QInputDialog::getItem(
+                          this,
+                          tr("Input the language you want to use:"),
+                          tr("Language available:English,简体中文"),
+                          languages,
+                          0,
+                          false,
+                          &ok);
+    if(languageSelect.compare("简体中文")==0)//load successful or not
+    {
+        if (translator.load(":/lans/zh.qm"))
+        {
+            qDebug()<<"ts file loaded successfully"<<endl;
+            qApp->installTranslator(&translator);//what is qApp?
+            ui.retranslateUi(this);
+        }
+    }
+    else if(languageSelect.compare("English")==0)
+    {
+        if (translator.load(":/lans/lans/en.qm"));
+        {
+            qApp->installTranslator(&translator);
+            ui.retranslateUi(this);
+        }
+    }
+}

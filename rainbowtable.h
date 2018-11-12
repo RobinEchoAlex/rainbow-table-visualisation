@@ -25,7 +25,9 @@ public :
     void setwhetherCalculated(std::string str,QString container);
     static std::string intToString(int i);
     void setFrontEndNodPair(std::string frontNode,std::string endNode,QString container);
-    void send(QString sendText,int status);
+    void sendToBrowser(QString sendText,int status);
+    void sendToDemo(QString label,QString information);
+    void demo(std::string hashValue,QString mode,QString container);
 
     std::map <std::string, std::string> frontEndNode ;
     std::map <std::string, bool> whetherCalculated;
@@ -33,6 +35,8 @@ public :
     QHash <QString,bool > HashWhetherCalculated;
     int lengthOfChain=3;
     QString whatisstored;
+    int lengthofUpperLimit;
+    int lengthofLowerLimit;
 
 public slots:
     void loadExistedTable(std::string filename,QString container);
@@ -43,6 +47,7 @@ public slots:
 
 signals:
     void newText( QString &name,int status);
+    void newDemo( QString &information,QString &label);
 
 private:
     Ui::MainWindow ui;

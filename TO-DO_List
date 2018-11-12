@@ -1,18 +1,19 @@
-Add another R function
--improve to in accordance with the [,]
-
 Add fake-crack detection
 -when two R function projects to one value
 
 Add one step crack module
--using label to specify
+-Right & Left images added, also the settings png
+-Flash
 
 Add statictics
 -time function records time used
 -record the time that collapse?
 
+Internationalise
+-Auto match with systm
+
 Thread 71
--R->thread (using connect?)
+R->thread (using connect?)
 
 https:/ /www.zhihu.com/question/19790488对于这个问题，2003年提出的彩虹
 表算法进行了针对性的改进。它在各步的运算中，并不使用统一的R函数，而是分别

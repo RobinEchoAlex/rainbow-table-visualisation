@@ -12,9 +12,9 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     QTranslator translator;
-    translator.load(":/lans/lans/zh.ts");
-    MainWindow mainwindow;
+    translator.load(":/lans/zh.qm");
     a.installTranslator(&translator);
+    MainWindow mainwindow;
     mainwindow.show();
     return a.exec();
 }
