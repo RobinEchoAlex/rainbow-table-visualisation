@@ -366,9 +366,15 @@ void MainWindow::demoPrint(QString information,QString label)
 
 void MainWindow::on_Statistics_clicked()
 {
+    double time=(rainbowtable->generationTime)/1000.0;//millisecond->second
+    qDebug()<<rainbowtable->generationTime<<endl;
+    qDebug()<<time<<endl;
     QMessageBox::information(this, tr("About..."), tr("Current chain length:3\n")
-                                                    +tr("Time spend on last generation is :\n")
-                                                    +QString::number(rainbowtable->generationTime));
+                                                    +tr("Time spend on last generation : \n")
+                                                    +QString::number(time,'f',3)
+                                                    +tr("s\n")
+                                                    +tr("The number of chain save by mid-storing : ")
+                                                    +QString::number(rainbowtable->collapseTime));
 }
 
 void MainWindow::languageSelection()

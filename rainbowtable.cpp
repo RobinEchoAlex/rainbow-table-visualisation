@@ -27,6 +27,7 @@ void Rainbowtable::generate(int lowMargin, int upMargin,QString mode,QString con
 
     sendToBrowser("Generation start now:",1);
     timeStart = GetTickCount();
+    collapseTime=0;
 
     if(whatisstored!=mode)
     {
@@ -40,15 +41,19 @@ void Rainbowtable::generate(int lowMargin, int upMargin,QString mode,QString con
     for(int i=lowMargin; i<=upMargin; i++)
     {
         FString = QString::number(i);
-        QTransferString= "Now the word encrypted is "+FString ;
-        sendToBrowser(QTransferString,0);
+
         if ((whetherCalculated[intToString(i)]==true && container.compare("map")==0)
-                ||(HashWhetherCalculated.value(QString::number(i))==true && container.compare("hash")==1))
+                ||(HashWhetherCalculated.value(QString::number(i))==true && container.compare("hash")==0))
         {
+            QTransferString= "The word"+FString+"is storaged in the previous deduction";
+            sendToBrowser(QTransferString,0);
+            collapseTime++;
             continue;
         }
         else
         {
+            QTransferString= "Now the word encrypted is "+FString ;
+            sendToBrowser(QTransferString,0);
             std::stringstream ss;
             ss<<i;
             std::string str = ss.str();

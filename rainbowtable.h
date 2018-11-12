@@ -38,6 +38,7 @@ public :
     int lengthofUpperLimit;
     int lengthofLowerLimit;
     unsigned generationTime;
+    int collapseTime;
 
 public slots:
     void loadExistedTable(std::string filename,QString container);
