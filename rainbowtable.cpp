@@ -25,7 +25,7 @@ void Rainbowtable::generate(int lowMargin, int upMargin,QString mode,QString con
     unsigned long timeStart;
     unsigned long timeEnd;
 
-    sendToBrowser("Generation start now:",1);
+    sendToBrowser(tr("Generation start now:"),1);
     timeStart = GetTickCount();
     collapseTime=0;
 
@@ -45,14 +45,14 @@ void Rainbowtable::generate(int lowMargin, int upMargin,QString mode,QString con
         if ((whetherCalculated[intToString(i)]==true && container.compare("map")==0)
                 ||(HashWhetherCalculated.value(QString::number(i))==true && container.compare("hash")==0))
         {
-            QTransferString= "  The word "+FString+"is storaged in the previous deduction";
+            QTransferString=FString+tr(" is storaged in the previous deduction");
             sendToBrowser(QTransferString,0);
             collapseTime++;
             continue;
         }
         else
         {
-            QTransferString= "  Now the word encrypted is "+FString ;
+            QTransferString=tr( "  Now the word encrypted is ")+FString ;
             sendToBrowser(QTransferString,0);
             std::stringstream ss;
             ss<<i;
@@ -63,7 +63,6 @@ void Rainbowtable::generate(int lowMargin, int upMargin,QString mode,QString con
             QString Qrstr;
             std::string hashStr;
             char buf[lengthOfWord];
-
             while(j<lengthOfChain)//Fixed-length chain mode
             {
                 //need to call thread
@@ -92,13 +91,13 @@ void Rainbowtable::generate(int lowMargin, int upMargin,QString mode,QString con
                 if (j==0)
                 {
                     Qstr = QString::fromStdString(str);
-                    QTransferString= Qstr+"'s hash String is " + FString;
+                    QTransferString= Qstr+tr("'s hash is ") + FString;
                     sendToBrowser(QTransferString,0);
                 }
                 else
                 {
                     Qrstr = QString::fromStdString(rstr);
-                    QTransferString=Qrstr +"'s hash String is " + FString;
+                    QTransferString=Qrstr +tr("'s hash is ") + FString;
                     sendToBrowser(QTransferString,0);
                 }
                 //Information displayed on text browser end
@@ -126,10 +125,11 @@ void Rainbowtable::generate(int lowMargin, int upMargin,QString mode,QString con
             // modify demo end
         }
     }
-    sendToBrowser("generate successfully",1);
+    sendToBrowser(tr("generate successfully"),1);
     timeEnd = GetTickCount();
     this->generationTime = timeEnd - timeStart;
-}
+
+    }
 
 void Rainbowtable::setwhetherCalculated(std::string str,QString container)
 {
@@ -306,7 +306,7 @@ void Rainbowtable::loadExistedTable(std::string filename,QString container)
         QEndNode=  QString::fromStdString(endNode);
         QFrontNode = QString::fromStdString(frontNode);
         QTransferNode = "Load Node "+ QFrontNode +" "+QEndNode;
-        qDebug() << QTransferNode <<endl;
+        //qDebug() << QTransferNode <<endl;
         sendToBrowser(QTransferNode,0);
          if (container.compare("map")==0) frontEndNode[endNode]=frontNode;
          if (container.compare("hash")==0)  HashFrontEndNode[QString::fromStdString(endNode)]=frontNode;
@@ -316,7 +316,7 @@ void Rainbowtable::loadExistedTable(std::string filename,QString container)
 
 void Rainbowtable::sendToBrowser(QString sendText,int status)//send the word to the text display window
 {
-    qDebug()<<status<<endl;
+    //qDebug()<<status<<endl;
     emit newText(sendText,status);
 }
 
@@ -369,6 +369,7 @@ void Rainbowtable::demo(std::string hashValue,QString mode,QString container)
             if(counter==0) sendToDemo("OKOrNot","OK");
             else sendToDemo("OKOrNot","Fail");
             information = "R"+QString::number(chainLength-(i+1));//since the i has been ++ at the last step, +1 instead of +2
+            sendToDemo("OKOrNot2","OK");
             sendToDemo("Rx",information);
             foundflag=1;
             if (container.compare("map")==0) frontNode = frontEndNode[rResult];

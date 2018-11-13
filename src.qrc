@@ -9,8 +9,8 @@
         <file>images/RightArrow.png</file>
         <file>images/Language.png</file>
     </qresource>
-    <qresource prefix="/lans">
-        <file>zh.qm</file>
+    <qresource prefix="/languages">
         <file>lans/en.qm</file>
+        <file>lans/zh.qm</file>
     </qresource>
 </RCC>

@@ -1,16 +1,8 @@
-Add fake-crack detection
--when two R function projects to one value
-
 Add one step crack module
 -Flash
 
 Thread 71
 R->thread (using connect?)
-
-BUG TO FIX
-- the last node do not show when it is generated already
-- demo value disappear
-
 
 https:/ /www.zhihu.com/question/19790488对于这个问题，2003年提出的彩虹
 表算法进行了针对性的改进。它在各步的运算中，并不使用统一的R函数，而是分别

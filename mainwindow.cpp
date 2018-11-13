@@ -150,6 +150,18 @@ void MainWindow::on_StartGeneration_clicked()
     a=algorithmGroup.checkedId();
     c=containerGroup.checkedId();
 
+    if(upMargin-lowMargin>=50)
+    {
+        if (QMessageBox::No == QMessageBox::question(this,
+                                                      tr("Important Performance Warning"),
+                                                      tr("Generate such a large table may lead to halt, continue?"),
+                                                      QMessageBox::Yes | QMessageBox::No,
+                                                      QMessageBox::No))
+        {
+            return;
+        }
+    }
+
     rainbowtable->lengthofUpperLimit=this->getLength(upMargin);
     rainbowtable->lengthofLowerLimit=this->getLength(lowMargin);
     rainbowtable->generate(lowMargin,upMargin,algorithmList[a],containerList[c]);
@@ -388,15 +400,15 @@ void MainWindow::languageSelection()
     languages<<tr("English")<<tr("简体中文");//update needed if new languages added
     languageSelect = QInputDialog::getItem(
                           this,
-                          tr("Input the language you want to use:"),
-                          tr("Language available:English,简体中文"),
+                          tr("Choose the language you want to use:"),
+                          tr("Language available : English,简体中文"),
                           languages,
                           0,
                           false,
                           &ok);
     if(languageSelect.compare("简体中文")==0)//load successful or not
     {
-        if (translator.load(":/lans/zh.qm"))
+        if (translator.load(":/languages/lans/zh.qm"))
         {
             qDebug()<<"ts file loaded successfully"<<endl;
             qApp->installTranslator(&translator);//what is qApp?
@@ -405,7 +417,7 @@ void MainWindow::languageSelection()
     }
     else if(languageSelect.compare("English")==0)
     {
-        if (translator.load(":/lans/lans/en.qm"));
+        if (translator.load(":/languages/lans/en.qm"));
         {
             qApp->installTranslator(&translator);
             ui.retranslateUi(this);

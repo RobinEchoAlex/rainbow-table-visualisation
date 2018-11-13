@@ -18,6 +18,7 @@
 class Rainbowtable: public QObject
 {
     Q_OBJECT
+    QThread workerThread;
 public :
     Rainbowtable() {}
     void chainDeduction(std::string queryHash,std::string frontNode,QString mode);

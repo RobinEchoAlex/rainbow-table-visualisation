@@ -18,13 +18,13 @@ int main(int argc, char *argv[])
     QLocale locale;
     if( locale.language() == QLocale::English )  //Automatically choose the language, in accordance with system enviornment
         {
-            translator.load(QString(":/lans/lans/en.qm"));
+            translator.load(QString(":/languages/lans/en.qm"));
             a.installTranslator(&translator);
         }
     else if( locale.language() == QLocale::Chinese )
         {
             qDebug() << "中文系统";
-            translator.load(QString(":/lans/zh.qm"));
+            translator.load(QString(":/languages/lans/zh.qm"));
             a.installTranslator(&translator);
         }
 
