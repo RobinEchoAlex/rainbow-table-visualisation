@@ -148,6 +148,7 @@ std::string Rainbowtable::intToString(int i)
 
 void Rainbowtable::setFrontEndNodPair(std::string frontNode,std::string endNode,QString container)
 {
+    qDebug()<<QString::fromStdString(endNode)<<QString::fromStdString(frontNode)<<endl;
     if(container=="map") frontEndNode[endNode]=frontNode;
     else if(container=="hash") HashFrontEndNode[QString::fromStdString(endNode)]=frontNode;
 }
@@ -200,11 +201,11 @@ void Rainbowtable::chainDeduction(std::string queryHash,std::string frontNode,QS
 
     QQueryHash=QString::fromStdString(queryHash);
     QCurrentNode=QString::fromStdString(currentNode);
-    QTransferString = "The value for Hash "+QQueryHash+" is "+QCurrentNode;
+    QTransferString = tr("The value for Hash ")+QQueryHash+tr(" is ")+QCurrentNode;
     sendToBrowser("Congratulation!",1);
     sendToBrowser(QTransferString,1);
     sendToDemo("RealValue",QCurrentNode);
-    sendToDemo("MatchOrNot","Match!");
+    sendToDemo("MatchOrNot",tr("Match!"));
 }
 
 void Rainbowtable::query(std::string hashValue,QString mode,QString container)
@@ -217,6 +218,7 @@ void Rainbowtable::query(std::string hashValue,QString mode,QString container)
     int foundflag=0;
     int i=0;
     const int chainLength=3; //specify the x of Rx function we are using, cause the query process is going backward
+    qDebug()<<"待破解"<<QString::fromStdString(hashValue)<<endl;
 
     while(counter<lengthOfChain)
     {
@@ -225,9 +227,11 @@ void Rainbowtable::query(std::string hashValue,QString mode,QString container)
         {
             i=0;
             tmpHashValue=hashValue;
-            while(i<counter)
+            while(i<=counter)
             {
-                rResult=R_numberFilter(tmpHashValue,chainLength-(i+2));//carefully treat with the relationship of lowmark since R starts from R0,R1..to R chainL-1
+                qDebug()<<"调用R"<<(chainLength-1-counter)+i<<endl;
+                rResult=R_numberFilter(tmpHashValue,(chainLength-1-counter)+i);//carefully treat with the relationship of lowmark since R starts from R0,R1..to R chainL-1
+                 qDebug()<<"R结果"<<QString::fromStdString(rResult)<<endl;
                 if(mode=="MD5") tmpHashValue=md5(rResult);
                 else if(mode=="SHA1")
                 {
@@ -236,7 +240,9 @@ void Rainbowtable::query(std::string hashValue,QString mode,QString container)
                 }
                 i++;
             }
-            rResult=R_numberFilter(tmpHashValue,chainLength-(i+2));
+            //=R_numberFilter(tmpHashValue,(chainLength-1-counter)+i);
+             qDebug()<<"最终R结果"<<QString::fromStdString(rResult)<<endl;
+
         }
         if((frontEndNode[rResult]!="" && container.compare("map")==0)
                 || (HashFrontEndNode.value(QString::fromStdString(rResult))!="" && container.compare("hash")==0))//A successful query
@@ -251,7 +257,7 @@ void Rainbowtable::query(std::string hashValue,QString mode,QString container)
     }
     if(foundflag==0)
     {
-        sendToBrowser("Fail to find the password",1);
+        sendToBrowser(tr("Fail to find the password"),1);
     }
 }
 

@@ -268,13 +268,13 @@ void MainWindow::save()
 
     if (QfileName.isEmpty())
     {
-        information="Saving Rainbow table cancelled";
+        information=tr("Saving Rainbow table cancelled");
         this->print(information,0);
         return;
     }
     else
     {
-        information = "Save database in "+QfileName;
+        information = tr("Save database in ")+QfileName;
         this->print(information,0);
         if (containerGroup.checkedId()==0) rainbowtable->saveTableinMap(fileName);
         else if(containerGroup.checkedId()==1) rainbowtable->saveTableinHash(fileName);
